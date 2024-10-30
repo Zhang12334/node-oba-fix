@@ -30,10 +30,9 @@ jobs:
         run: |
           cp $(which node) .
           cp platforms/linux/run.sh .
-          tar -caf openbmclapi-linux.tar.xz dist package.json node_modules run.sh
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: openbmclapi-linux
-          path: openbmclapi-linux.tar.xz
+          path: dist package.json node_modules run.sh
