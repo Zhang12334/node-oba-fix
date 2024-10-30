@@ -16,7 +16,7 @@ jobs:
             artifact_name: "openbmclapi-linux.tar.xz"
           # - os: windows-latest
           #   artifact_name: "openbmclapi-windows.tar.gz"
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
