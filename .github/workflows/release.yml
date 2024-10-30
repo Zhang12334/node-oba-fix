@@ -30,9 +30,9 @@ jobs:
         run: |
           cp $(which node) .
           cp platforms/linux/run.sh .
-          zip -r -9 openbmclapi-linux.zip dist package.json node_modules run.sh
+          zip -r -9 Node-OBA-Fix-linux.zip dist package.json node_modules run.sh
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          path: openbmclapi-linux.zip
+          path: Node-OBA-Fix-linux.zip
