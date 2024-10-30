@@ -14,8 +14,10 @@ import {IFileList} from './types.js'
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-export async function bootstrap(version: string): Promise<void> {
-  logger.info(colors.green(`booting Node-OBA-Fix ${version}`))
+export async function bootstrap(version: string, protocol_version: string): Promise<void> {
+  logger.info(colors.green(`Booting Node-OBA-Fix`))
+  logger.info(colors.green(`当前版本：${version}`))
+  logger.info(colors.green(`协议版本：${protocol_version}`))
   const tokenManager = new TokenManager(config.clusterId, config.clusterSecret, version)
   await tokenManager.getToken()
   const cluster = new Cluster(config.clusterSecret, version, tokenManager)

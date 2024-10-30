@@ -6,12 +6,13 @@ import {fileURLToPath} from 'url'
 import {bootstrap} from './bootstrap.js'
 
 const packageJson = JSON.parse(readFileSync(fileURLToPath(new URL('../package.json', import.meta.url)), 'utf8')) as {
+  protocol_version: string
   version: string
 }
 
 config()
 if (process.env.NO_DAEMON || !cluster.isPrimary) {
-  bootstrap(packageJson.version).catch((err) => {
+  bootstrap(packageJson.version, packageJson.protocol_version).catch((err) => {
     // eslint-disable-next-line no-console
     console.error(err)
     // eslint-disable-next-line n/no-process-exit
