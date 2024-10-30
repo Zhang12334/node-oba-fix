@@ -29,7 +29,7 @@ jobs:
       - run: |
           cp $(which node) .
           cp platforms/linux/run.sh .
-          tar -caf ${{ matrix.artifact_name }} dist nginx package.json node_modules run.sh
+          tar -caf ${{ matrix.artifact_name }} dist package.json node_modules run.sh
         if: matrix.os == 'ubuntu-latest'
 
       - name: "Upload Artifact"
