@@ -185,7 +185,7 @@ export class Cluster {
           size: content.length,
           mtime: Date.now(),
         });
-        logger.info(`已生成测速文件: ${i}MB`);
+        logger.info(`已生成Measure测速文件: ${i}MB`);
       }
     }
     
