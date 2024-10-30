@@ -20,20 +20,6 @@ export default function MeasureRouteFactory(config: Config): Router {
     const filename = `${size}`; // 文件名直接为1-200
     const filePath = join('/measure', filename); // 结合路径
 
-    // 检查文件是否存在
-    const fileExists = await storage.exists(filePath);
-    if (!fileExists) {
-      // 随机生成内容
-      const buffer = Buffer.alloc(size * 1024 * 1024, '0066ccff', 'hex');
-      await storage.writeFile(filePath, buffer, {
-        path: filePath,
-        hash: filename, // 可以根据需要自定义 hash
-        size: size * 1024 * 1024,
-        mtime: Date.now(),
-      });
-      logger.info(`已生成测速文件: ${filePath}`);
-    }
-
     res.set('content-length', (size * 1024 * 1024).toString());
     res.sendFile(filePath, (err) => {
       if (err) {

@@ -172,22 +172,24 @@ export class Cluster {
       throw new Error('存储异常')
     }
 
-    logger.info(`正在生成缺失的测量文件`);
+    const requiredSizes = Array.from({ length: 200 }, (_, i) => i + 1); // 1到200的大小
 
-    for (let i = 1; i <= 200; i++) {
-      const fileExists = await this.storage.exists(`${i}`);
+    for (const size of requiredSizes) {
+      const filename = `${size}`; // 目标文件名
+      const fileExists = await this.storage.exists(join('measure', filename)); // 检查文件是否存在
     
       if (!fileExists) {
-        const content = randomBytes(i * 1024 * 1024); // 生成指定大小的随机字节，单位为 MB
-        await this.storage.writeFile(`${i}`, content, {
-          path: `/measure/${i}`,
-          hash: '',
-          size: content.length,
+        const content = Buffer.alloc(size * 1024 * 1024, '0066ccff', 'hex'); // 生成指定大小的随机内容
+        await this.storage.writeFile(join('measure', filename), content, { // 确保路径正确
+          path: join('measure', filename), // 使用 join 函数确保路径的正确性
+          hash: generateHash(size), // 假设有个函数生成hash
+          size: size * 1024 * 1024,
           mtime: Date.now(),
         });
-        logger.info(`已生成Measure测速文件: ${i}MB`);
+        logger.info(`已生成测速文件: ${size}MB`);
       }
     }
+    
     
     if (this.skipsync === true) {
       return
