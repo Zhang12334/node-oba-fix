@@ -39,20 +39,17 @@ import type {TokenManager} from './token.js'
 import type {IFileList} from './types.js'
 import {setupUpnp} from './upnp.js'
 import {checkSign, hashToFilename} from './util.js'
-import { randomBytes } from 'crypto';
-
 interface ICounters {
   hits: number
   bytes: number
 }
-
 const whiteListDomain = ['localhost', 'bangbang93.com']
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export class Cluster {
-  public readonly counters: ICounters = {hits: 0, bytes: 0}
+  public counters: ICounters = {hits: 0, bytes: 0}
   public isEnabled = false
   public wantEnable = false
   public interval?: NodeJS.Timeout
@@ -60,7 +57,7 @@ export class Cluster {
   public readonly storage: IStorage
 
   private readonly prefixUrl = process.env.CLUSTER_BMCLAPI ?? 'https://openbmclapi.bangbang93.com'
-  private readonly skipsync = process.env.CLUSTER_SKIP_SYNC === 'false'
+  private readonly skipsync = process.env.CLUSTER_SKIP_SYNC ?? 'false'
   private readonly host?: string
   private _port: number | string
   private readonly publicPort: number
@@ -171,30 +168,12 @@ export class Cluster {
     if (!storageReady) {
       throw new Error('存储异常')
     }
-
-    const requiredSizes = Array.from({ length: 200 }, (_, i) => i + 1); // 1到200的大小
-
-    for (const size of requiredSizes) {
-      const filename = `${size}`; // 目标文件名
-      const fileExists = await this.storage.exists(join('measure', filename)); // 检查文件是否存在
     
-      if (!fileExists) {
-        const content = Buffer.alloc(size * 1024 * 1024, '0066ccff', 'hex'); // 生成指定大小的随机内容
-        await this.storage.writeFile(join('measure', filename), content, { // 确保路径正确
-          path: join('measure', filename), // 使用 join 函数确保路径的正确性
-          hash: generateHash(size), // 假设有个函数生成hash
-          size: size * 1024 * 1024,
-          mtime: Date.now(),
-        });
-        logger.info(`已生成测速文件: ${size}MB`);
-      }
-    }
-    
-    
-    if (this.skipsync === true) {
-      return
-    }
     logger.info('正在检查缺失文件')
+    if (this.skipsync) {
+      logger.info('已跳过文件同步')
+      return
+    }    
     const missingFiles = await this.storage.getMissingFiles(fileList.files)
     // 跳过同步
     if (missingFiles.length === 0) {
@@ -343,7 +322,8 @@ export class Cluster {
         return next(err)
       }
     })
-    app.use('/measure', MeasureRouteFactory(config))
+    const storage = getStorage(config); // 获取 storage 实例
+    app.use('/measure', MeasureRouteFactory(config, storage)); // 传入 storage
     let server: Server
     if (https) {
       server = createSecureServer(

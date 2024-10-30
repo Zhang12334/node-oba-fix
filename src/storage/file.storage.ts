@@ -1,10 +1,9 @@
 import Bluebird from 'bluebird'
-import colors from 'colors/safe.js'
 import type {Request, Response} from 'express'
 import fse from 'fs-extra'
-import {readdir, rm, stat, unlink, writeFile} from 'fs/promises'
+import {readdir, rm, stat, writeFile} from 'fs/promises'
 import {min} from 'lodash-es'
-import {join, sep} from 'path'
+import {join} from 'path'
 import {logger} from '../logger.js'
 import {IFileInfo, IGCCounter} from '../types.js'
 import {hashToFilename} from '../util.js'
@@ -68,13 +67,6 @@ export class FileStorage implements IStorage {
         if (s.isDirectory()) {
           queue.push(p)
           continue
-        }
-        const cacheDirWithSep = this.cacheDir + sep
-        if (!fileSet.has(p.replace(cacheDirWithSep, ''))) {
-          logger.info(colors.gray(`delete expire file: ${p}`))
-          await unlink(p)
-          counter.count++
-          counter.size += s.size
         }
       }
     } while (queue.length !== 0)

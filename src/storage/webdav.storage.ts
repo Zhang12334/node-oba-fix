@@ -1,4 +1,3 @@
-import colors from 'colors/safe.js'
 import type {Request, Response} from 'express'
 import Keyv from 'keyv'
 import ms from 'ms'
@@ -157,13 +156,6 @@ export class WebdavStorage implements IStorage {
         if (entry.type === 'directory') {
           queue.push(entry.filename)
           continue
-        }
-        if (!fileSet.has(entry.basename)) {
-          logger.info(colors.gray(`delete expire file: ${entry.filename}`))
-          await this.client.deleteFile(entry.filename)
-          this.files.delete(entry.basename)
-          counter.count++
-          counter.size += entry.size
         }
       }
     } while (queue.length !== 0)
