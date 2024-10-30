@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  build-tar-ball:
-    name: "Build and Tar Ball"
+  build:
+    name: "Build"
     strategy:
       fail-fast: false
       matrix:
