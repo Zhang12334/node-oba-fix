@@ -17,7 +17,6 @@
 | CLUSTER_BYOC        | 否  | false        | 是否使用自定义域名, (BYOC=Bring you own certificate),当使用国内服务器需要备案时, 需要启用这个参数来使用你自己的域名, 并且你需要自己提供ssl termination |
 | DISABLE_ACCESS_LOG  | 否  | false        | 禁用访问日志输出                                                                                               |
 | ENABLE_UPNP         | 否  | false        | 启用 UPNP 端口映射                                                                                           |
-| CLUSTER_SKIP_SYNC   | 否  | false        | 跳过同步    |
 | CLUSTER_MEASURE_302PATH | 否（若使用alist则必填）  | http://127.0.0.1/d        | Alist文件下载路径，需要访问到的目录为OBA文件存储目录(本地能访问即可，用于302 measure) |
 
 ### 安装

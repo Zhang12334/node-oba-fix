@@ -57,7 +57,6 @@ export class Cluster {
   public readonly storage: IStorage
 
   private readonly prefixUrl = process.env.CLUSTER_BMCLAPI ?? 'https://openbmclapi.bangbang93.com'
-  private readonly skipsync = process.env.CLUSTER_SKIP_SYNC ?? 'false'
   private readonly host?: string
   private _port: number | string
   private readonly publicPort: number
@@ -170,10 +169,6 @@ export class Cluster {
     }
     
     logger.info('正在检查缺失文件')
-    if (this.skipsync) {
-      logger.info('已跳过文件同步')
-      return
-    }    
     const missingFiles = await this.storage.getMissingFiles(fileList.files)
     // 跳过同步
     if (missingFiles.length === 0) {
@@ -395,7 +390,7 @@ export class Cluster {
         return
       }
       this.counters.hits++
-      this.counters.bytes += parseInt(match.groups?.size ?? '0', 10) || 0
+      this.counters.bytes += parseInt(match.groups?.size ?? '0', 10)
     })
 
     this.interval = setInterval(() => {

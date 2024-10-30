@@ -45,13 +45,13 @@ export class Keepalive {
         milliseconds: ms('10s'),
       })
       if (!status) {
-        logger.fatal('kicked by server')
+        logger.fatal('喜报：被服务器踹了')
         return await this.restart()
       }
       this.keepAliveError = 0
     } catch (e) {
       this.keepAliveError++
-      logger.error(e, 'keep alive error')
+      logger.error(e, '节点似啦！')
       if (this.keepAliveError >= 3) {
         await this.restart()
       }
@@ -75,8 +75,8 @@ export class Keepalive {
     })) as [object, unknown]
 
     if (err) throw new Error('keep alive error', {cause: err})
-    const bytes = prettyBytes(counters.bytes, {binary: true})
-    logger.info(`keep alive success, serve ${counters.hits} files, ${bytes}`)
+    const bytes = prettyBytes(counters.bytes)
+    logger.info(`保活成功，提供了 ${counters.hits} 个文件, 大小 ${bytes}`)
     this.cluster.counters.hits -= counters.hits
     this.cluster.counters.bytes -= counters.bytes
     return !!date
