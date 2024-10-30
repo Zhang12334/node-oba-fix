@@ -2,8 +2,8 @@ name: "Release Binary"
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main # 可以指定要监听的分支，如 main
 
 jobs:
   build-tar-ball:
@@ -31,8 +31,14 @@ jobs:
       - run: |
           cp $(which node) .
           cp platforms/linux/run.sh .
-          tar -caf ${{ matrix.artifact_name }} dist nginx package.json node_modules node run.sh
+          tar -caf ${{ matrix.artifact_name }} dist nginx package.json node_modules run.sh
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_name }}
 
       ## windows
       - run: |
@@ -47,24 +53,3 @@ jobs:
         with:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.artifact_name }}
-
-  create-release:
-    runs-on: "ubuntu-latest"
-    name: "Create Release"
-    needs: "build-tar-ball"
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          merge-multiple: true
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: ${{ contains(github.ref, '-') }}
-          files: |
-              openbmclapi-linux.tar.xz
-              openbmclapi-windows.tar.gz
-              openbmclapi-macos.tar.xz
-
-
-
