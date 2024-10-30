@@ -4,6 +4,7 @@ import { Buffer } from 'buffer'; // 引入 Buffer
 import type { Config } from '../config.js';
 import { checkSign } from '../util.js';
 import { getStorage } from '../storage/base.storage.js';
+import logger from '../logger'; // 确保导入 logger
 
 export default function MeasureRouteFactory(config: Config): Router {
   const router = express.Router();
@@ -37,7 +38,7 @@ export default function MeasureRouteFactory(config: Config): Router {
     res.sendFile(filePath, (err) => {
       if (err) {
         logger.error(`发送文件失败: ${filePath}`, err);
-        res.status(err.status).end();
+        res.status(err.status || 500).end(); // 确保使用默认状态码
       }
     });
   });
