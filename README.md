@@ -19,6 +19,32 @@
 | ENABLE_UPNP         | 否  | false        | 启用 UPNP 端口映射                                                                                           |
 | CLUSTER_MEASURE_302PATH | 否（若使用alist则必填）  | http://127.0.0.1/d        | Alist文件下载路径，需要访问到的目录为OBA文件存储目录(本地能访问即可，用于302 measure) |
 
+备注：CLUSTER_MEASURE_302PATH这里我写的很神金，请照图自己理解
+
+我是这么写的：
+
+![fdbd86fc72a7242536adf2bfaa9b12b0](https://github.com/user-attachments/assets/97edc920-6142-4d65-ba31-650ff49de787)
+
+这里的路径是拼合的，因此首先你需要将Alist全局里的全局签名关掉，再关掉存储项里的签名
+
+之后这里该怎么填呢？
+
+measure文件夹位于实际存储文件的文件夹下，就像这样
+
+![9ffeb4aa2e4f70e1c98b93cc492e19e0](https://github.com/user-attachments/assets/4b31027e-1239-4ac2-9708-c7edb563c3b3)
+
+那么你需要点进去measure文件夹，此时假设这里有一个文件名为“10MB”的文件夹，你需要复制他的下载地址
+
+看起来就是这样的：http://192.168.10.4/d/oba/measure/10MB
+
+那么按照我编写代码的思路，这会是拼合后的整体路径
+
+那么你需要填写到env的部分就是：http://192.168.10.4/d/oba
+
+程序会自动补全 /measure/10MB 这一部分
+
+此处的下载地址仅需OBA-Fix程序能够访问即可，用于解析302到的新地址并返回主控
+
 ### 安装
 
 #### 环境
