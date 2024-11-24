@@ -33,7 +33,7 @@ measure文件夹位于实际存储文件的文件夹下，就像这样
 
 ![9ffeb4aa2e4f70e1c98b93cc492e19e0](https://github.com/user-attachments/assets/4b31027e-1239-4ac2-9708-c7edb563c3b3)
 
-那么你需要点进去measure文件夹，此时假设这里有一个文件名为“10MB”的文件夹，你需要复制他的下载地址
+那么你需要点进去measure文件夹，此时假设这里有一个文件名为“10MB”的文件，你需要复制他的下载地址
 
 看起来就是这样的：http://192.168.10.4/d/oba/measure/10MB
 
